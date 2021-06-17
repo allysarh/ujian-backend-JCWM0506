@@ -5,20 +5,20 @@ module.exports = {
         try {
             let { username, email, password } = req.body
             let uid = Date.now()
-            console.log(username, email, password, uid)
-            if (username.length > 6 && password.match(/[0-9]/ig) && password.match(/[.@#$%^&*()]/)) {
+            if (username.length > 6 && password.match(/[0-9]/ig) && password.match(/[.@#$%^&*()]/) && email.match(/[@]/ig) && email.match(/[.]/ig)) {
                 let register = `insert into users (uid, username, email, password) values (${uid}, ${db.escape(username)}, ${db.escape(email)}, ${db.escape(password)})`
                 await dbQuery(register)
+                let get = `SELECT * from users;`
+                get = await dbQuery(get)
+                console.log(get)
+                let { id } = get[0]
+                console.log(id, uid, username, email)
+                let token = createToken({ id, uid, username, email })
+    
+                res.status(200).send({ id, uid, username, email, token })
+            } else {
+                res.status(404).send("Format not match")
             }
-
-            let get = `SELECT * from users;`
-            get = await dbQuery(get)
-            console.log(get)
-            let { id } = get[0]
-            console.log(id, uid, username, email)
-            let token = createToken({ id, uid, username, email })
-
-            res.status(200).send({ id, uid, username, email, token })
         } catch (error) {
             next(error)
         }

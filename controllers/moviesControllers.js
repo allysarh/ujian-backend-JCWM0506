@@ -24,7 +24,6 @@ module.exports = {
     },
     getMovieQuery: async (req, res, next) => {
         try {
-            console.log(req.query)
             let getMovie = `
             SELECT name, release_date, 
             release_month, release_year, duration_min, genre, description, movie_status as status, location, time
@@ -101,15 +100,3 @@ module.exports = {
         }
     }
 }
-
-/**
- * {
-    "name": "Mulan",
-    "genre": "Fantasy",
-    "release_date": 25,
-    "release_month": 3,
-    "release_year": 2020,
-    "duration_min": 120,
-    "description": "A girl disguises ..."
-}
- */
